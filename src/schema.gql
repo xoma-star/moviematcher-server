@@ -1,0 +1,27 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type MoviesEntity {
+  """id на tmdb"""
+  id: Float!
+
+  """название фильма"""
+  title: String!
+
+  """краткое описание"""
+  overview: String!
+
+  """жанры"""
+  genres: [String!]!
+
+  """дата выхода"""
+  release_date: String!
+
+  """кадры"""
+  screens: [String!]!
+}
+
+type Query {
+  popular: [MoviesEntity!]!
+}
