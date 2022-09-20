@@ -12,9 +12,10 @@ export class MoviesService {
             a.screens = (await $api.get(`https://api.themoviedb.org/3/movie/${x.id}/images?include_image_language=en,null`)).data.backdrops
             movies.push(a)
         }
+
         return movies.map(x => ({
             id: x.id,
-            genres: x.genres,
+            genres: x.genres.map(x => x.name),
             overview: x.overview,
             release_date: x.release_date,
             screens: x.screens.map(x => `https://image.tmdb.org/t/p/original${x.file_path}`),

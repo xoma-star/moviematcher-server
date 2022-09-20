@@ -22,6 +22,31 @@ type MoviesEntity {
   screens: [String!]!
 }
 
+type UserEntity {
+  id: String
+  vk_user_id: Int!
+  liked: [Int!]!
+  disliked: [Int!]!
+  saved: [Int!]!
+  skipped: [Int!]!
+  willBeShown: [Int!]!
+}
+
 type Query {
   popular: [MoviesEntity!]!
+  getUser(id: String!): UserEntity!
+  getUserByVk(id: Int!): UserEntity!
+}
+
+type Mutation {
+  createUser(id: Int!): UserEntity!
+  updateUser(id: String!, data: UpdateUserInputType!): UserEntity!
+}
+
+input UpdateUserInputType {
+  liked: [Int!]
+  disliked: [Int!]
+  saved: [Int!]
+  skipped: [Int!]
+  willBeShown: [Int!]
 }
