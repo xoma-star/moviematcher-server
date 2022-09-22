@@ -14,6 +14,6 @@ export class UserEntity{
     saved?: number[]
     @Field(() => [Int])
     skipped?: number[]
-    @Field(() => [Int])
-    willBeShown?: number[]
+    @Field(() => [String])
+    favourite_genres?: string[]
 }

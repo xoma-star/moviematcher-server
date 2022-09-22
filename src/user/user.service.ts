@@ -25,7 +25,7 @@ export class UserService {
             disliked: [],
             saved: [],
             skipped: [],
-            willBeShown: []
+            favourite_genres: []
         })
     }
 
