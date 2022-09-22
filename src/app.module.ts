@@ -6,6 +6,7 @@ import {GraphQLModule} from "@nestjs/graphql";
 import {ApolloDriver, ApolloDriverConfig} from "@nestjs/apollo";
 import { PbModule } from './pb/pb.module';
 import { UserModule } from './user/user.module';
+import { VkModule } from './vk/vk.module';
 import * as path from "path";
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import * as path from "path";
       MoviesModule,
       PbModule,
       UserModule,
+      VkModule,
   ],
   controllers: [AppController],
   providers: [AppService],

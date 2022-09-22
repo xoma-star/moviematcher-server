@@ -29,7 +29,7 @@ type UserEntity {
   disliked: [Int!]!
   saved: [Int!]!
   skipped: [Int!]!
-  willBeShown: [Int!]!
+  favourite_genres: [String!]!
 }
 
 type Query {
@@ -41,6 +41,7 @@ type Query {
 type Mutation {
   createUser(id: Int!): UserEntity!
   updateUser(id: String!, data: UpdateUserInputType!): UserEntity!
+  pushMovie(id: String!, to: pushMovieToType!, movieId: Int!): UserEntity!
 }
 
 input UpdateUserInputType {
@@ -49,4 +50,11 @@ input UpdateUserInputType {
   saved: [Int!]
   skipped: [Int!]
   willBeShown: [Int!]
+}
+
+enum pushMovieToType {
+  liked
+  disliked
+  saved
+  skipped
 }
