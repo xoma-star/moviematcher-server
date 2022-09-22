@@ -4,7 +4,7 @@ import {UserEntity} from "./user.entity";
 import {UpdateUserInputType} from "./update.user.input.type";
 import {pushMovieToType} from "./pushMovie.user.input.type";
 import {Response} from "express";
-import {HttpException, HttpStatus, Res} from "@nestjs/common";
+import {HttpException, HttpStatus, Res, Headers} from "@nestjs/common";
 import {VkService} from "../vk/vk.service";
 
 @Resolver()
@@ -37,7 +37,7 @@ export class UserResolver {
        try{
            const currentMovies = await this.userService.getById(id)
            if(!currentMovies) throw new HttpException('Аккаунт не найден', HttpStatus.NOT_FOUND)
-           if(!res.req.headers.vk_params) throw new HttpException('Невозможно авторизовать', HttpStatus.BAD_REQUEST)
+           if(!res.req.headers.authorization) throw new HttpException('Невозможно авторизовать', HttpStatus.BAD_REQUEST)
            if(!this.vkService.validateSign(res.req.headers.vk_params as string)) throw new HttpException('Неверная подпись', HttpStatus.FORBIDDEN)
            for(const v of Object.keys(currentMovies)){
                if(Array.isArray(currentMovies[v]) && currentMovies[v].indexOf(movieId) >= 0) throw new HttpException('Уже оценено', HttpStatus.FORBIDDEN)
