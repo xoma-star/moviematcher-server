@@ -46,4 +46,18 @@ export class UserResolver {
            return await this.updateUser(id, {[to]: currentMovies[to]})
        }catch (e) {throw e}
     }
+    @Mutation(() => UserEntity)
+    async updateGenres(
+        @Args('id', {type: () => String}) id: string,
+        @Args('genres', {type: () => [String]}) genres: string[],
+        @Res() res: Response
+    ){
+        try {
+            const user = await this.userService.getById(id)
+            if(!user) throw new HttpException('Аккаунт не найден', HttpStatus.NOT_FOUND)
+            if(!res.req.headers.authorization) throw new HttpException('Невозможно авторизовать', HttpStatus.BAD_REQUEST)
+            if(!this.vkService.validateSign(res.req.headers.authorization as string)) throw new HttpException('Неверная подпись', HttpStatus.FORBIDDEN)
+            return await this.updateUser(id, {favourite_genres: genres})
+        }catch (e) {throw e}
+    }
 }
