@@ -10,4 +10,8 @@ export class MoviesResolver {
     async popular(): Promise<MoviesEntity[]>{
         return this.moviesService.getPopular()
     }
+    @Query(() => [String])
+    async getGenreList(): Promise<string[]>{
+        return this.moviesService.getGenres()
+    }
 }

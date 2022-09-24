@@ -22,4 +22,10 @@ export class MoviesService {
             title: x.title
         }))
     }
+
+    async getGenres(): Promise<string[]>{
+        const genres = await $api.get('https://api.themoviedb.org/3/genre/movie/list')
+
+        return genres.data.genres.map(x => x.name)
+    }
 }
