@@ -18,7 +18,7 @@ export class PbService {
     async getRecords<Type>(collection: string, count: number, filter?: string): Promise<Type[]>{
         const obj = {}
         if(filter) obj['filter'] = filter
-        return (await client.records.getList(collection, parseInt((Math.random() * 10000).toString()), count, {...obj})).items
+        return (await client.records.getList(collection, parseInt((Math.random() * 843).toString()), count, {...obj})).items
     }
 
     async updateRecord<Type>(collection: string, id: string, data: any): Promise<Type>{
