@@ -15,8 +15,10 @@ export class PbService {
         return await client.records.create(collection, {...data})
     }
 
-    async getAllRecords<Type>(collection: string): Promise<Type[]>{
-        return await client.records.getFullList(collection, 10000000000000)
+    async getRecords<Type>(collection: string, count: number, filter?: string): Promise<Type[]>{
+        const obj = {}
+        if(filter) obj['filter'] = filter
+        return (await client.records.getList(collection, 1, count, {...obj})).items
     }
 
     async updateRecord<Type>(collection: string, id: string, data: any): Promise<Type>{

@@ -1,16 +1,15 @@
 import {Field, InputType, Int} from "@nestjs/graphql";
-import {UserEntity} from "./user.entity";
 
 @InputType()
-export class UpdateUserInputType extends UserEntity{
-    @Field(() => [Int], {nullable: true})
-    liked?: number[]
-    @Field(() => [Int], {nullable: true})
-    disliked?: number[]
-    @Field(() => [Int], {nullable: true})
-    saved?: number[]
-    @Field(() => [Int], {nullable: true})
-    skipped?: number[]
+export class UpdateUserInputType{
+    @Field(() => [String], {nullable: true})
+    liked?: string[]
+    @Field(() => [String], {nullable: true})
+    disliked?: string[]
+    @Field(() => [String], {nullable: true})
+    saved?: string[]
+    @Field(() => [String], {nullable: true})
+    skipped?: string[]
     @Field(() => [Int], {nullable: true})
     willBeShown?: number[]
 }

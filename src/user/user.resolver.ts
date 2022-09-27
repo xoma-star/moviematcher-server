@@ -4,12 +4,14 @@ import {UserEntity} from "./user.entity";
 import {UpdateUserInputType} from "./update.user.input.type";
 import {pushMovieToType} from "./pushMovie.user.input.type";
 import {Response} from "express";
-import {HttpException, HttpStatus, Res, Headers} from "@nestjs/common";
+import {HttpException, HttpStatus, Res} from "@nestjs/common";
 import {VkService} from "../vk/vk.service";
+import {MoviesEntity} from "../movies/movies.entity";
+import {MoviesService} from "../movies/movies.service";
 
 @Resolver()
 export class UserResolver {
-    constructor(private userService: UserService, private vkService: VkService) {}
+    constructor(private userService: UserService, private vkService: VkService, private movieService: MoviesService) {}
     @Query(() => UserEntity)
     async getUser(@Args('id', {type: () => String}) id: string): Promise<UserEntity>{
         return await this.userService.getById(id)
@@ -31,7 +33,7 @@ export class UserResolver {
     async pushMovie(
         @Args('id', {type: () => String}) id: string,
         @Args('to', {type: () => pushMovieToType}) to: pushMovieToType,
-        @Args('movieId', {type: () => Int}) movieId: number,
+        @Args('movieId', {type: () => String}) movieId: string,
         @Res() res: Response
     ){
        try{
@@ -58,6 +60,19 @@ export class UserResolver {
             if(!res.req.headers.authorization) throw new HttpException('Невозможно авторизовать', HttpStatus.BAD_REQUEST)
             if(!this.vkService.validateSign(res.req.headers.authorization as string)) throw new HttpException('Неверная подпись', HttpStatus.FORBIDDEN)
             return await this.updateUser(id, {favourite_genres: genres})
+        }catch (e) {throw e}
+    }
+    @Query(() => [MoviesEntity])
+    async getRecommended(
+        @Args('id', {type: () => String}) id: string,
+        @Args('count', {nullable: true, defaultValue: 5, type: () => Int}) count: number = 5
+    ){
+        try {
+            const user = await this.userService.getById(id)
+            if(!user) throw new HttpException('Не найден', HttpStatus.NOT_FOUND)
+            const rated = [...user.saved, ...user.skipped, ...user.liked, ...user.disliked]
+            const filter = rated.map(x => `id != '${x}'`).join(' && ')
+            return this.movieService.getMovies(count, filter)
         }catch (e) {throw e}
     }
 }

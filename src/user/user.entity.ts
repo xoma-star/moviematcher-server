@@ -6,14 +6,14 @@ export class UserEntity{
     id?: string
     @Field(() => Int)
     vk_user_id?: number
-    @Field(() => [Int])
-    liked?: number[]
-    @Field(() => [Int])
-    disliked?: number[]
-    @Field(() => [Int])
-    saved?: number[]
-    @Field(() => [Int])
-    skipped?: number[]
+    @Field(() => [String])
+    liked?: string[]
+    @Field(() => [String])
+    disliked?: string[]
+    @Field(() => [String])
+    saved?: string[]
+    @Field(() => [String])
+    skipped?: string[]
     @Field(() => [String])
     favourite_genres?: string[]
 }

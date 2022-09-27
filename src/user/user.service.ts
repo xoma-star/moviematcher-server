@@ -11,7 +11,7 @@ export class UserService {
     }
     async getIdByVk(id: number): Promise<UserEntity>{
         try{
-            const all = await this.pbService.getAllRecords<UserEntity>('users')
+            const all = await this.pbService.getRecords<UserEntity>('users', 1, `vk_user_id = ${id}`)
             const needed = all.find(x => x.vk_user_id === id)
             if(!needed) throw new HttpException('Не найдено', HttpStatus.NOT_FOUND)
             return needed

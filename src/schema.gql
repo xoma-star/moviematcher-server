@@ -4,7 +4,12 @@
 
 type MoviesEntity {
   """id на tmdb"""
-  id: Float!
+  tmdb_id: Float!
+  id: String!
+  imdb_id: String!
+  rating: Float!
+  companies: [String!]!
+  countries: [String!]!
 
   """название фильма"""
   title: String!
@@ -25,31 +30,33 @@ type MoviesEntity {
 type UserEntity {
   id: String
   vk_user_id: Int!
-  liked: [Int!]!
-  disliked: [Int!]!
-  saved: [Int!]!
-  skipped: [Int!]!
+  liked: [String!]!
+  disliked: [String!]!
+  saved: [String!]!
+  skipped: [String!]!
   favourite_genres: [String!]!
 }
 
 type Query {
-  popular: [MoviesEntity!]!
   getGenreList: [String!]!
+  getMovies(count: Int!, filter: String): [MoviesEntity!]!
   getUser(id: String!): UserEntity!
   getUserByVk(id: Int!): UserEntity!
+  getRecommended(id: String!, count: Int = 5): [MoviesEntity!]!
 }
 
 type Mutation {
   createUser(id: Int!): UserEntity!
   updateUser(id: String!, data: UpdateUserInputType!): UserEntity!
-  pushMovie(id: String!, to: pushMovieToType!, movieId: Int!): UserEntity!
+  pushMovie(id: String!, to: pushMovieToType!, movieId: String!): UserEntity!
+  updateGenres(id: String!, genres: [String!]!): UserEntity!
 }
 
 input UpdateUserInputType {
-  liked: [Int!]
-  disliked: [Int!]
-  saved: [Int!]
-  skipped: [Int!]
+  liked: [String!]
+  disliked: [String!]
+  saved: [String!]
+  skipped: [String!]
   willBeShown: [Int!]
 }
 

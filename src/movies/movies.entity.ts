@@ -1,9 +1,19 @@
-import {Field, ObjectType} from "@nestjs/graphql";
+import {Field, Float, ObjectType} from "@nestjs/graphql";
 
 @ObjectType()
 export class MoviesEntity{
     @Field({description: 'id на tmdb'})
-    id: number
+    tmdb_id: number
+    @Field()
+    id: string
+    @Field()
+    imdb_id: string
+    @Field(() => Float)
+    rating: number
+    @Field(() => [String])
+    companies: string[]
+    @Field(() => [String])
+    countries: string[]
     @Field({description: 'название фильма'})
     title: string
     @Field({description: 'краткое описание'})
