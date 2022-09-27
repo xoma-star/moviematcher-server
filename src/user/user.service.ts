@@ -1,10 +1,11 @@
 import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
 import {PbService} from "../pb/pb.service";
 import {UserEntity} from "./user.entity";
+import {MoviesService} from "../movies/movies.service";
 
 @Injectable()
 export class UserService {
-    constructor(private pbService: PbService) {}
+    constructor(private pbService: PbService, private movieService: MoviesService) {}
 
     async getById(id: string): Promise<UserEntity>{
         return await this.pbService.getRecord<UserEntity>('users', id)
@@ -31,5 +32,14 @@ export class UserService {
 
     async updateUser(id: string, data: any): Promise<UserEntity>{
         return await this.pbService.updateRecord('users', id, data)
+    }
+
+    async getRecommended(id: string, count: number){
+        const user = await this.getById(id)
+        if(!user) throw new HttpException('Не найден', HttpStatus.NOT_FOUND)
+        const rated = [...user.saved, ...user.skipped, ...user.liked, ...user.disliked]
+        const movies = await this.movieService.getMovies(count)
+
+        return movies.filter(x => rated.indexOf(x.id) < 0).slice(0, count)
     }
 }

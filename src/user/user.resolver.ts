@@ -11,7 +11,7 @@ import {MoviesService} from "../movies/movies.service";
 
 @Resolver()
 export class UserResolver {
-    constructor(private userService: UserService, private vkService: VkService, private movieService: MoviesService) {}
+    constructor(private userService: UserService, private vkService: VkService) {}
     @Query(() => UserEntity)
     async getUser(@Args('id', {type: () => String}) id: string): Promise<UserEntity>{
         return await this.userService.getById(id)
@@ -68,11 +68,8 @@ export class UserResolver {
         @Args('count', {nullable: true, defaultValue: 5, type: () => Int}) count: number = 5
     ){
         try {
-            const user = await this.userService.getById(id)
-            if(!user) throw new HttpException('Не найден', HttpStatus.NOT_FOUND)
-            const rated = [...user.saved, ...user.skipped, ...user.liked, ...user.disliked]
-            const filter = rated.map(x => `id != '${x}'`).join(' && ')
-            return this.movieService.getMovies(count, filter)
+            // const filter = rated.map(x => `id != '${x}'`).join(' && ')
+            return this.userService.getRecommended(id, count)
         }catch (e) {throw e}
     }
 }
