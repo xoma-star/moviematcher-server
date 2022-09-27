@@ -39,11 +39,7 @@ export class MoviesService {
         const res = await this.pbService.getRecords<MoviesEntity>('movies', count, filter)
         return res.map(x => ({
             ...x,
-            screens: x.screens.slice(0, 4).map(async x => {
-                const ext = x.split('.').pop()
-                const response = await $api.get(`https://image.tmdb.org/t/p/original${x}`, {responseType: 'arraybuffer'})
-                return `data:image/${ext};base64,${Buffer.from(response.data).toString('base64')}`
-            })
+            screens: x.screens.map(v => `https://api.xoma-star.tk/image/${v}`)
         }))
     }
 }
