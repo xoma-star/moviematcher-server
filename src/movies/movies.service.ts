@@ -39,7 +39,7 @@ export class MoviesService {
         const res = await this.pbService.getRecords<MoviesEntity>('movies', count, filter)
         return res.map(x => ({
             ...x,
-            screens: x.screens.map(v => `https://api.xoma-star.tk/image/${encodeURIComponent(v)}`)
+            screens: [...x.screens].sort(() => 0.5 - Math.random()).slice(0, 4).map(v => `https://api.xoma-star.tk/image/${encodeURIComponent(v)}`)
         }))
     }
 }
