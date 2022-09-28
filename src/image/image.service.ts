@@ -6,6 +6,6 @@ import * as sharp from 'sharp'
 export class ImageService {
     async get(path: string){
         const image = await axios.get(path, {responseType: "arraybuffer"})
-        return await sharp(image.data).toColourspace('rgb16').jpeg({quality: 10, force: false, progressive: true}).toBuffer()
+        return await sharp(image.data).toColourspace('rgb32').jpeg({quality: 20, force: false, progressive: true}).toBuffer()
     }
 }
