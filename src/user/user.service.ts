@@ -40,6 +40,6 @@ export class UserService {
         const rated = [...user.saved, ...user.skipped, ...user.liked, ...user.disliked]
         const movies = await this.movieService.getAllMovies()
         //TODO: каждый раз сортировать и фильтровать - полная хуйня. заменить.
-        return movies.sort(() => 0.5 - Math.random()).filter(x => rated.indexOf(x.id) < 0 && x.popularity > 30).slice(0, count)
+        return movies.sort(() => 0.5 - Math.random()).filter(x => rated.indexOf(x.id) < 0 && x.popularity > 30).slice(0, count).map(x => ({...x, screens: x.screens.slice(0, 4)}))
     }
 }
