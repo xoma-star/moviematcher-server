@@ -42,4 +42,8 @@ export class MoviesService {
             screens: [...x.screens].sort(() => 0.5 - Math.random()).slice(0, 4).map(v => `https://api.xoma-star.tk/image/${encodeURIComponent(v)}`)
         }))
     }
+
+    async getAllMovies(): Promise<MoviesEntity[]>{
+        return await this.pbService.getAllRecords<MoviesEntity>('movies')
+    }
 }

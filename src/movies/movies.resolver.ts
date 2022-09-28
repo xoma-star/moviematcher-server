@@ -16,4 +16,8 @@ export class MoviesResolver {
     ){
         return await this.moviesService.getMovies(count, filter)
     }
+    @Query(() => [MoviesEntity])
+    async getAllMovies(){
+        return await this.moviesService.getAllMovies()
+    }
 }

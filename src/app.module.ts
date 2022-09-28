@@ -8,6 +8,7 @@ import { PbModule } from './pb/pb.module';
 import { UserModule } from './user/user.module';
 import { VkModule } from './vk/vk.module';
 import { ImageModule } from './image/image.module';
+import { RedisModule } from './redis/redis.module';
 import * as path from "path";
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import * as path from "path";
       UserModule,
       VkModule,
       ImageModule,
+      RedisModule,
   ],
   controllers: [AppController],
   providers: [AppService],

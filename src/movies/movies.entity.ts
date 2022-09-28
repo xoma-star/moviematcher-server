@@ -1,4 +1,4 @@
-import {Field, Float, ObjectType} from "@nestjs/graphql";
+import {Field, Float, Int, ObjectType} from "@nestjs/graphql";
 
 @ObjectType()
 export class MoviesEntity{
@@ -24,4 +24,8 @@ export class MoviesEntity{
     release_date: string
     @Field(() => [String], {description: 'кадры'})
     screens: string[]
+    @Field(() => Float)
+    popularity: number
+    @Field(() => Int)
+    runtime: number
 }
