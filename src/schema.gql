@@ -41,7 +41,7 @@ type UserEntity {
 
 type Query {
   getGenreList: [String!]!
-  getMovies(count: Int!, filter: String): [MoviesEntity!]!
+  getMovies(ids: [String!]!): [MoviesEntity!]!
   getAllMovies: [MoviesEntity!]!
   getUser(id: String!): UserEntity!
   getUserByVk(id: Int!): UserEntity!

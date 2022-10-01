@@ -35,12 +35,8 @@ export class MoviesService {
         return genres.data.genres.map(x => x.name)
     }
 
-    async getMovies(count: number, filter?: string){
-        const res = await this.pbService.getRecords<MoviesEntity>('movies', count, filter)
-        return res.map(x => ({
-            ...x,
-            screens: [...x.screens].sort(() => 0.5 - Math.random()).slice(0, 4).map(v => `https://api.xoma-star.tk/image/${encodeURIComponent(v)}`)
-        }))
+    async getMovies(ids: string[]): Promise<MoviesEntity[]>{
+        return await this.pbService.getRecords('movies', ids.length, ids.map(x => `id = '${x}'`).join(' || '))
     }
 
     async getAllMovies(): Promise<MoviesEntity[]>{

@@ -1,4 +1,4 @@
-import {Args, Int, Query, Resolver} from '@nestjs/graphql';
+import {Args, Query, Resolver} from '@nestjs/graphql';
 import {MoviesService} from "./movies.service";
 import {MoviesEntity} from "./movies.entity";
 
@@ -11,10 +11,9 @@ export class MoviesResolver {
     }
     @Query(() => [MoviesEntity])
     async getMovies(
-        @Args('count', {type: () => Int!}) count: number,
-        @Args('filter', {type: () => String, nullable: true}) filter?: string
+        @Args('ids', {type: () => [String]}) movies: string[]
     ){
-        return await this.moviesService.getMovies(count, filter)
+        return await this.moviesService.getMovies(movies)
     }
     @Query(() => [MoviesEntity])
     async getAllMovies(){
