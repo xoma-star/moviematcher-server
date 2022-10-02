@@ -11,7 +11,7 @@ import {MoviesService} from "../movies/movies.service";
 
 @Resolver()
 export class UserResolver {
-    constructor(private userService: UserService, private vkService: VkService) {}
+    constructor(private userService: UserService, private vkService: VkService, private movieService: MoviesService) {}
     @Query(() => UserEntity)
     async getUser(@Args('id', {type: () => String}) id: string): Promise<UserEntity>{
         return await this.userService.getById(id)
@@ -34,6 +34,7 @@ export class UserResolver {
         @Args('id', {type: () => String}) id: string,
         @Args('to', {type: () => pushMovieToType}) to: pushMovieToType,
         @Args('movieId', {type: () => String}) movieId: string,
+        @Args('force', {type: () => Boolean, nullable: true, defaultValue: false}) force: boolean = false,
         @Res() res: Response
     ){
        try{
@@ -41,11 +42,21 @@ export class UserResolver {
            if(!currentMovies) throw new HttpException('Аккаунт не найден', HttpStatus.NOT_FOUND)
            if(!res.req.headers.authorization) throw new HttpException('Невозможно авторизовать', HttpStatus.BAD_REQUEST)
            if(!this.vkService.validateSign(res.req.headers.authorization as string)) throw new HttpException('Неверная подпись', HttpStatus.FORBIDDEN)
-           for(const v of Object.keys(currentMovies)){
-               if(Array.isArray(currentMovies[v]) && currentMovies[v].indexOf(movieId) >= 0) throw new HttpException('Уже оценено', HttpStatus.FORBIDDEN)
+           const movie = await this.movieService.getMovie(movieId)
+           if(!movie) throw new HttpException('Фильм не найден', HttpStatus.NOT_FOUND)
+           if(!force){
+               for(const v of Object.keys(currentMovies)){
+                   if(Array.isArray(currentMovies[v]) && currentMovies[v].indexOf(movieId) >= 0) throw new HttpException('Уже оценено', HttpStatus.FORBIDDEN)
+               }
+           }else{
+               for(const v of Object.keys(currentMovies)){
+                   if(!Array.isArray(currentMovies[v])) continue
+                   const index = currentMovies[v].indexOf(movieId)
+                   if(index >= 0) currentMovies[v].splice(index, 1)
+               }
            }
            currentMovies[to].push(movieId)
-           return await this.updateUser(id, {[to]: currentMovies[to]})
+           return await this.updateUser(id, {...currentMovies})
        }catch (e) {throw e}
     }
     @Mutation(() => UserEntity)

@@ -51,7 +51,7 @@ type Query {
 type Mutation {
   createUser(id: Int!): UserEntity!
   updateUser(id: String!, data: UpdateUserInputType!): UserEntity!
-  pushMovie(id: String!, to: pushMovieToType!, movieId: String!): UserEntity!
+  pushMovie(id: String!, to: pushMovieToType!, movieId: String!, force: Boolean = false): UserEntity!
   updateGenres(id: String!, genres: [String!]!): UserEntity!
 }
 

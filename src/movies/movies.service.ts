@@ -28,7 +28,9 @@ export class MoviesService {
     //         title: x.title
     //     }))
     // }
-
+    async getMovie(id: string): Promise<MoviesEntity>{
+        return await this.pbService.getRecord('movies', id)
+    }
     async getGenres(): Promise<string[]>{
         const genres = await $api.get('https://api.themoviedb.org/3/genre/movie/list')
 
