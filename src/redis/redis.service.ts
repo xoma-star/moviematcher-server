@@ -12,7 +12,7 @@ const client = Redis.createClient({url: 'redis://45.159.249.198:6379'});
 @Injectable()
 export class RedisService {
     async set(field: string, value: string){
-        await client.setEx(field, 60 * 60 * 24 * 7 * 4, value)
+        await client.set(field, value)
     }
 
     async get(field: string) {
