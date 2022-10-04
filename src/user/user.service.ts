@@ -39,12 +39,22 @@ export class UserService {
         if(!user) throw new HttpException('Не найден', HttpStatus.NOT_FOUND)
         const rated = [...user.saved, ...user.skipped, ...user.liked, ...user.disliked]
         const movies = await this.movieService.getAllMovies()
-        const filtered = movies.filter(x => rated.indexOf(x.id) < 0 && x.popularity > 30)
-        const returned = []
-        while(returned.length < count){
-            returned.push(filtered[Math.floor(Math.random() * filtered.length)])
-        }
-        return returned
+        const filtered = movies
+            .filter(x => rated.indexOf(x.id) < 0 && x.popularity > 30)
+            .map(x => {
+                let count = 0
+                x.genres.forEach(v => {
+                    if(user.favourite_genres.some(s => s === v)) count ++
+                })
+                return {...x, genresMatch: count / user.favourite_genres.length}
+            })
+            .sort((a, b) => a.genresMatch < b.genresMatch ? 1 : -1)
+            .slice(0, count)
+        // const returned = []
+        // while(returned.length < count){
+        //     returned.push(filtered[Math.floor(Math.random() * filtered.length)])
+        // }
+        return filtered
             .map(x => ({...x, screens: [...x.screens].sort(() => 0.5 - Math.random()).slice(0, 4).map(v => `https://api.xoma-star.tk/image/${encodeURIComponent(v)}`)}))
     }
 }

@@ -20,7 +20,7 @@ export class PbService {
     async getAllRecords<Type>(collection: string): Promise<Type[]>{
         const redisCache = await this.redisService.get(collection)
         if(!redisCache){
-            const list = await client.records.getFullList(collection, 1000000)
+            const list = await client.records.getFullList(collection, 200)
             await this.redisService.set(collection, JSON.stringify(list.sort(() => 0.5 - Math.random())))
             return list
         }
